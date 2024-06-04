@@ -3,6 +3,7 @@
 # compiled output
 /dist
 /tmp
+memmory
 /out-tsc
 
 # Runtime data
