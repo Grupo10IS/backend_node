@@ -5,7 +5,12 @@ import path from "path";
 import { Sequelize } from "sequelize";
 
 // models
-import User from "./models/User";
+import Cliente from "./models/Cliente";
+import Mesa from "./models/Mesa";
+import Reserva from "./models/Reserva";
+import Restaurante from "./models/Restaurante";
+
+// routers
 import clientRouter from "./routes/clientRouter";
 
 const app = express();
@@ -14,10 +19,14 @@ const port = 3000;
 // -----------------
 // | connect to db |
 // -----------------
-const connection = new Sequelize("sqlite:memmory:");
+const db_uri = "sqlite::memmory:";
+const connection = new Sequelize(db_uri);
 
 // configure our models
-User.configure(connection);
+Cliente.configure(connection);
+Mesa.configure(connection);
+Reserva.configure(connection);
+Restaurante.configure(connection);
 
 connection.sync().then();
 connection.authenticate();

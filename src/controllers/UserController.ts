@@ -1,5 +1,5 @@
-import User from "../models/User";
+import User from "../models/Cliente";
 
 export function find() {
-    return User.findAll();
+    return 0;
 }
