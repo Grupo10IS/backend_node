@@ -6,15 +6,15 @@ import {
     InferCreationAttributes,
     ForeignKey,
 } from "sequelize";
-import Mesa from "./Mesa";
-import Cliente from "./Cliente";
+import { MesaSeq } from "./Mesa";
+import { ClienteSeq } from "./Cliente";
 
-export default class Reserva extends Model<
-    InferAttributes<Reserva>,
-    InferCreationAttributes<Reserva>
+export class ReservaSeq extends Model<
+    InferAttributes<ReservaSeq>,
+    InferCreationAttributes<ReservaSeq>
 > {
-    declare mesa: ForeignKey<Mesa["id"]>;
-    declare cliente: ForeignKey<Cliente["id"]>;
+    declare mesa: ForeignKey<MesaSeq["id"]>;
+    declare cliente: ForeignKey<ClienteSeq["id"]>;
     declare fecha: Date;
     declare horario_inicio: number;
     declare horario_fin: number;
@@ -22,7 +22,7 @@ export default class Reserva extends Model<
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
-        Reserva.init(
+        ReservaSeq.init(
             {
                 id: {
                     type: DataTypes.INTEGER,

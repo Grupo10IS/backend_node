@@ -1,19 +1,23 @@
 import express, { Router } from "express";
-import Cliente from "../models/Cliente";
-const clientRouter: Router = express.Router();
+import { ClientController } from "../controllers/ClientController";
 
-clientRouter
-    .get("/", async function (req, res, next) {
-        const user = await Cliente.findAll();
-        res.send(user);
-    })
+export function NewClientRoute(controller: ClientController): Router {
+    const clientRouter: Router = express.Router();
+    clientRouter
+        .get("/", async function (req, res, next) {
+            const id = req.query.query as string | undefined;
+            if (!id || id === undefined) {
+                res.send("Se debe proporcionar el id del cliente");
+                return;
+            }
 
-    .post("/", async function (req, res, next) {
-        // await Cliente.bulkCreate([
-        //     { apellido: "Jack Sparrow" },
-        //     { apellido: "Davy Jones" },
-        // ]);
-        res.status(200).send();
-    });
+            const user = await controller.getById(parseInt(id));
+            res.send(user);
+        })
 
-export default clientRouter;
+        .post("/", async function (req, res, next) {
+            res.status(200).send();
+        });
+
+    return clientRouter;
+}

@@ -6,9 +6,9 @@ import {
     InferCreationAttributes,
 } from "sequelize";
 
-export default class Restaurante extends Model<
-    InferAttributes<Restaurante>,
-    InferCreationAttributes<Restaurante>
+export class RestauranteSeq extends Model<
+    InferAttributes<RestauranteSeq>,
+    InferCreationAttributes<RestauranteSeq>
 > {
     // there is no need to use CreationOptional on lastName because nullable attributes
     // are always optional in User.create()
@@ -18,7 +18,7 @@ export default class Restaurante extends Model<
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
-        Restaurante.init(
+        RestauranteSeq.init(
             {
                 direccion: {
                     type: DataTypes.STRING,

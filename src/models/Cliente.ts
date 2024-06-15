@@ -4,22 +4,27 @@ import {
     Model,
     InferAttributes,
     InferCreationAttributes,
+    CreationOptional,
 } from "sequelize";
+import { ClientInterface, Cliente } from "../contract/Cliente";
 
-export default class Cliente extends Model<
-    InferAttributes<Cliente>,
-    InferCreationAttributes<Cliente>
-> {
-    // there is no need to use CreationOptional on lastName because nullable attributes
-    // are always optional in User.create()
+// implementacion con sequelize de los clientes
+export class ClienteSeq
+    extends Model<
+        InferAttributes<ClienteSeq>,
+        InferCreationAttributes<ClienteSeq>
+    >
+    implements ClientInterface
+{
+    // ------ SEQUELIZE initialization -------
     declare apellido: string;
     declare nombre: string;
     declare cedula: number;
-    declare id: number;
+    declare id: CreationOptional<number>;
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
-        Cliente.init(
+        ClienteSeq.init(
             {
                 id: {
                     type: DataTypes.INTEGER,
@@ -53,5 +58,23 @@ export default class Cliente extends Model<
             },
             { sequelize: connection, tableName: "Cliente" }
         );
+    }
+
+    // ------ contract implementation -------
+    async getById(id: number): Promise<Cliente> {
+        const c = await ClienteSeq.findByPk(id);
+        if (c == null) {
+            throw "User does not exist";
+        }
+
+        return new Cliente(c.nombre, c.apellido, c.cedula, c.id);
+    }
+
+    async add(c: Cliente) {
+        await ClienteSeq.create({
+            cedula: c.cedula,
+            nombre: c.nombre,
+            apellido: c.apellido,
+        });
     }
 }

@@ -6,13 +6,13 @@ import {
     InferCreationAttributes,
     ForeignKey,
 } from "sequelize";
-import Restaurante from "./Restaurante";
+import { RestauranteSeq } from "./Restaurante";
 
-export default class Mesa extends Model<
-    InferAttributes<Mesa>,
-    InferCreationAttributes<Mesa>
+export class MesaSeq extends Model<
+    InferAttributes<MesaSeq>,
+    InferCreationAttributes<MesaSeq>
 > {
-    declare restaurante: ForeignKey<Restaurante["id"]>;
+    declare restaurante: ForeignKey<RestauranteSeq["id"]>;
     declare nombre: string;
     declare posX: number;
     declare posY: number;
@@ -22,7 +22,7 @@ export default class Mesa extends Model<
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
-        Mesa.init(
+        MesaSeq.init(
             {
                 id: {
                     type: DataTypes.INTEGER,
