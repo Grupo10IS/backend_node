@@ -1,12 +1,4 @@
-import { find } from "../src/controllers/UserController";
-import { describe, expect, it } from "vitest"; // <-- **
+// tests for the functions go here
+import { describe, expect, it, vitest } from "vitest";
+import { Client } from "../src/db/Cliente";
 
-describe("No falla", () => {
-    it("returns 0 with no numbers input", () => {
-        expect(find()).toBe(0);
-    });
-
-    it("Debe fallar", () => {
-        expect(find()).toBe(2);
-    });
-});

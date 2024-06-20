@@ -1,16 +1,26 @@
-import { ClientInterface, Cliente } from "../contract/Cliente";
+import { Optional } from "sequelize";
+import { Client } from "../db/Client";
 
+// TODO: poner las validaciones
 export class ClientController {
-    cliente: ClientInterface;
-    constructor(c: ClientInterface) {
-        this.cliente = c;
+    static async getById(dni: number): Promise<Client | null> {
+        try {
+            const res = await Client.findOne({ where: { dni: dni } });
+            return res;
+        } catch (error) {
+            return null;
+        }
     }
 
-    getById(id: number): Promise<Cliente> {
-        return this.cliente.getById(id);
-    }
-
-    add(c: Cliente) {
-        this.cliente.add(c);
+    static async add(
+        name: string,
+        lastName: string,
+        dni: number
+    ): Promise<Client> {
+        return Client.create({
+            firstName: name,
+            lastName: lastName,
+            dni: dni,
+        });
     }
 }

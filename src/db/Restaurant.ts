@@ -4,25 +4,25 @@ import {
     Model,
     InferAttributes,
     InferCreationAttributes,
+    CreationOptional,
 } from "sequelize";
 
-export class RestauranteSeq extends Model<
-    InferAttributes<RestauranteSeq>,
-    InferCreationAttributes<RestauranteSeq>
+export class Restaurant extends Model<
+    InferAttributes<Restaurant>,
+    InferCreationAttributes<Restaurant>
 > {
     // there is no need to use CreationOptional on lastName because nullable attributes
     // are always optional in User.create()
-    declare direccion: string;
-    declare nombre: string;
-    declare id: number;
+    declare address: string;
+    declare name: string;
+    declare id: CreationOptional<number>;
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
-        RestauranteSeq.init(
+        Restaurant.init(
             {
-                direccion: {
+                address: {
                     type: DataTypes.STRING,
-                    key: "direccion",
                     allowNull: false,
                     validate: {
                         len: [1, 60],
@@ -30,21 +30,20 @@ export class RestauranteSeq extends Model<
                 },
                 id: {
                     type: DataTypes.INTEGER,
-                    key: "id",
                     allowNull: false,
                     autoIncrement: true,
                     primaryKey: true,
                 },
-                nombre: {
+                name: {
                     type: DataTypes.STRING,
-                    key: "nombre",
                     allowNull: false,
+                    unique: true,
                     validate: {
                         len: [1, 60],
                     },
                 },
             },
-            { sequelize: connection, tableName: "Restaurante" }
+            { sequelize: connection }
         );
     }
 }

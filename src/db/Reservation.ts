@@ -5,57 +5,54 @@ import {
     InferAttributes,
     InferCreationAttributes,
     ForeignKey,
+    CreationOptional,
 } from "sequelize";
-import { MesaSeq } from "./Mesa";
-import { ClienteSeq } from "./Cliente";
+import { Table } from "./Table";
+import { Client } from "./Client";
 
-export class ReservaSeq extends Model<
-    InferAttributes<ReservaSeq>,
-    InferCreationAttributes<ReservaSeq>
+export class Reservation extends Model<
+    InferAttributes<Reservation>,
+    InferCreationAttributes<Reservation>
 > {
-    declare mesa: ForeignKey<MesaSeq["id"]>;
-    declare cliente: ForeignKey<ClienteSeq["id"]>;
-    declare fecha: Date;
-    declare horario_inicio: number;
-    declare horario_fin: number;
-    declare id: number;
+    declare table: ForeignKey<Table["id"]>;
+    declare client: ForeignKey<Client["id"]>;
+    declare date: Date;
+    declare reservation_start: number;
+    declare reservation_end: number;
+    declare id: CreationOptional<number>;
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
-        ReservaSeq.init(
+        Reservation.init(
             {
                 id: {
                     type: DataTypes.INTEGER,
-                    key: "id",
                     allowNull: false,
                     autoIncrement: true,
                     primaryKey: true,
                 },
-                horario_inicio: {
+                reservation_start: {
                     type: DataTypes.INTEGER,
-                    key: "inicio",
                     allowNull: false,
                     validate: {
                         min: 12,
                         max: 23,
                     },
                 },
-                horario_fin: {
+                reservation_end: {
                     type: DataTypes.INTEGER,
-                    key: "fin",
                     allowNull: false,
                     validate: {
                         min: 12,
                         max: 23,
                     },
                 },
-                fecha: {
+                date: {
                     type: DataTypes.DATE,
-                    key: "fecha",
                     allowNull: false,
                 },
             },
-            { sequelize: connection, tableName: "Reserva" }
+            { sequelize: connection }
         );
     }
 }
