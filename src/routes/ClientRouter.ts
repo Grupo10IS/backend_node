@@ -12,14 +12,22 @@ export function NewClientRouter(): Router {
          *       type: object
          *       required:
          *         - id
-         *         - name
+         *         - dni
+         *         - firstName
+         *         - lastName
          *       properties:
          *         id:
-         *           type: string
+         *           type: number
          *           description: ID auto-generado del cliente
-         *         name:
+         *         firstName:
          *           type: string
          *           description: Nombre del cliente
+         *         lastName:
+         *           type: string
+         *           description: Apellido del cliente
+         *         dni:
+         *           type: number
+         *           description: DNI del cliente
          */
 
         /**
@@ -56,7 +64,7 @@ export function NewClientRouter(): Router {
          */
         .get("/", async function (req, res, next) {
             const dni = req.query.dni as string | undefined;
-            if (!dni || dni === undefined) {
+            if (dni === undefined) {
                 res.status(400).send("Se debe proporcionar el id del cliente");
                 return;
             }
@@ -67,7 +75,7 @@ export function NewClientRouter(): Router {
                 return;
             }
 
-            res.status(200).send(user);
+            res.status(200).send(JSON.stringify(user));
         })
 
         /**
@@ -77,11 +85,11 @@ export function NewClientRouter(): Router {
          *     Client:
          *       type: object
          *       required:
-         *         - name
+         *         - firstName
          *         - lastName
          *         - dni
          *       properties:
-         *         name:
+         *         firstName:
          *           type: string
          *           description: Nombre del cliente
          *         lastName:
@@ -121,14 +129,14 @@ export function NewClientRouter(): Router {
          */
         .post("/", async function (req, res, next) {
             const client = req.body;
-            if (!client.name || !client.lastName || !client.dni) {
+            if (!client.firstName || !client.lastName || !client.dni) {
                 res.status(400).send(
                     "Se debe proporcionar el nombre, el apellido y el dni"
                 );
                 return;
             }
 
-            ClientController.add(client.name, client.lastName, client.dni)
+            ClientController.add(client.firstName, client.lastName, client.dni)
                 .then(() => {
                     res.status(200).send();
                 })
