@@ -155,7 +155,7 @@ export function NewRestaurantRouter(): Router {
 
             if (!rest.id || !rest.name || !rest.address) {
                 res.status(400).send(
-                    "Se debe proporcionar el ID, el nombre y la direccion"
+                    "Se debe proporcionar el ID, el nuevo nombre y la nueva direccion"
                 );
                 return;
             }

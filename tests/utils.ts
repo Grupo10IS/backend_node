@@ -1,5 +1,11 @@
 import { initDb } from "../src/db";
 
+export async function cleanDb() {
+    const connection = await initDb();
+    await connection.drop({ cascade: true });
+    await connection.sync();
+}
+
 export async function fetchData(url) {
     const response = await fetch(url, {
         method: "GET",
@@ -50,8 +56,19 @@ export async function updateData(url, params) {
     }
 }
 
-export async function cleanDb() {
-    const connection = await initDb();
-    await connection.drop({ cascade: true });
-    await connection.sync();
+export async function deleteData(url, params) {
+    const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(params),
+    });
+
+    try {
+        const data = await response.json();
+        return { data, response };
+    } catch (error) {
+        return { undefined, response };
+    }
 }
