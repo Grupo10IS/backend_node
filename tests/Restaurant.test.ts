@@ -2,15 +2,14 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { cleanDb, deleteData, fetchData, postData, updateData } from "./utils";
 import { initServer } from "../src/server";
+import { apiRestaurantUrl } from "../src/constants";
 
-const url = "http://localhost:8080/api/restaurant";
+const url = "http://localhost:8080" + apiRestaurantUrl
 
 describe("/api/restaurants endpoint tests", async () => {
     beforeAll(async () => {
         await cleanDb();
-        initServer().listen(8080, () => {
-            console.log(`Server is running on http://localhost:${8080}`);
-        });
+        initServer().listen(8080, () => {});
     });
 
     // ---- GET ----

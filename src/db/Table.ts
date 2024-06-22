@@ -13,7 +13,7 @@ export class Table extends Model<
     InferAttributes<Table>,
     InferCreationAttributes<Table>
 > {
-    declare restaurant: ForeignKey<Restaurant["id"]>;
+    declare resId: ForeignKey<Restaurant["id"]>;
     declare name: string;
     declare posX: number;
     declare posY: number;
@@ -57,6 +57,9 @@ export class Table extends Model<
                         len: [1, 60],
                     },
                 },
+                resId: {
+                    type: DataTypes.NUMBER,
+                }
             },
             { sequelize: connection }
         );

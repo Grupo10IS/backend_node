@@ -1,14 +1,42 @@
+import { Op } from "sequelize";
 import { Table } from "../db/Table";
 
+type filters = {
+    floor?: string;
+    capacity?: string;
+    resId?: string;
+};
+
 // TODO: poner las validaciones
-export class ClientController {
-    static async listByFloor(
-        resId: number,
-        floor: number
-    ): Promise<Table[] | null> {
-        const res = await Table.findAll({
-            where: { restaurant: resId, floor: floor },
+export class TableController {
+    static async listAll(filter: filters): Promise<Table[] | null> {
+        // eslint-disable-next-line
+        const where: any = {};
+
+        if (filter.floor !== undefined) {
+            where.floor = parseInt(filter.floor);
+        }
+
+        if (filter.capacity !== undefined) {
+            console.log(filter.capacity);
+            where.capacity = {
+                [Op.gte]: [parseInt(filter.capacity)],
+            };
+        }
+
+        if (filter.resId !== undefined) {
+            where.resId = parseInt(filter.resId);
+        }
+
+        const results = await Table.findAll({
+            where: where,
         });
+
+        return results;
+    }
+
+    static async findById(id: number): Promise<Table | null> {
+        const res = await Table.findByPk(id);
         return res;
     }
 
@@ -22,7 +50,7 @@ export class ClientController {
     ) {
         await Table.create({
             name: name,
-            restaurant: resId,
+            resId: resId,
             posX: posX,
             posY: posY,
             floor: floor,
@@ -32,24 +60,6 @@ export class ClientController {
 
     static async delete(id: number) {
         await Table.destroy({ where: { id: id } });
-    }
-
-    static create(
-        name: string,
-        resId: number,
-        posX: number,
-        posY: number,
-        floor: number,
-        capacity: number
-    ) {
-        return Table.create({
-            name: name,
-            restaurant: resId,
-            posX: posX,
-            posY: posY,
-            floor: floor,
-            capacity: capacity,
-        });
     }
 
     static async update(

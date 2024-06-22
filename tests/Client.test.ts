@@ -2,15 +2,14 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { cleanDb, fetchData, postData } from "./utils";
 import { initServer } from "../src/server";
+import { apiClientUrl } from "../src/constants";
 
-const url = "http://localhost:8080/api/client";
+const url = "http://localhost:8080" + apiClientUrl;
 
 describe("Client", async () => {
     beforeAll(async () => {
         await cleanDb();
-        initServer().listen(8080, () => {
-            console.log(`Server is running on http://localhost:${8080}`);
-        });
+        initServer().listen(8080, () => {});
     });
 
     it("Should create a new Client", async () => {

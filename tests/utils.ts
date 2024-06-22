@@ -6,7 +6,7 @@ export async function cleanDb() {
     await connection.sync();
 }
 
-export async function fetchData(url) {
+export async function fetchData(url: string) {
     const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -22,7 +22,7 @@ export async function fetchData(url) {
     }
 }
 
-export async function postData(url, params) {
+export async function postData(url: string, params: any) {
     const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -39,7 +39,7 @@ export async function postData(url, params) {
     }
 }
 
-export async function updateData(url, params) {
+export async function updateData(url: string, params: any) {
     const response = await fetch(url, {
         method: "PUT",
         headers: {
@@ -56,7 +56,7 @@ export async function updateData(url, params) {
     }
 }
 
-export async function deleteData(url, params) {
+export async function deleteData(url: string, params: any) {
     const response = await fetch(url, {
         method: "DELETE",
         headers: {
