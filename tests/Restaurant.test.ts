@@ -45,8 +45,8 @@ describe("/api/restaurants endpoint tests", async () => {
         expect(celler.address).toEqual("espanha");
     });
 
-    it("Should filter the restaurants by id", async () => {
-        const { data, response } = await fetchData(`${url}?id=1`);
+    it("Should get the restaurant with the given id", async () => {
+        const { data, response } = await fetchData(`${url}/1`);
 
         expect(response.status).toEqual(200);
 
@@ -58,12 +58,26 @@ describe("/api/restaurants endpoint tests", async () => {
         expect(data.address).toEqual("espanha");
     });
 
-    it("Should response 204 restaurant not found", async () => {
-        const { response } = await fetchData(url + "?id=20");
-        expect(response.status).toEqual(204);
+    it("Should response 404 restaurant not found", async () => {
+        const { response } = await fetchData(url + "/20");
+        expect(response.status).toEqual(404);
+    });
+
+    it("Should response 400 invalid id format", async () => {
+        const { response } = await fetchData(url + "/cualquier12cosa");
+        expect(response.status).toEqual(400);
     });
 
     // ---- POST ----
+    it("Should fail. Restaurant already exists", async () => {
+        const { response } = await postData(url, {
+            address: "espanha",
+            name: "El Celler de Can Roca",
+        });
+
+        expect(response.status).toEqual(409);
+    });
+
     it("Should fail. Invalid post-body request", async () => {
         const cases = [
             {

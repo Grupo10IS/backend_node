@@ -6,53 +6,6 @@ export function NewRestaurantRouter(): Router {
     restRouter
         /**
          * @swagger
-         * /api/restaurant:
-         *   get:
-         *     summary: Obtiene un restaurante por ID o lista todos los restaurantes si no se proporciona ID
-         *     tags: [Restaurants]
-         *     parameters:
-         *       - in: query
-         *         name: id
-         *         schema:
-         *           type: string
-         *         required: false
-         *         description: El ID del restaurante
-         *     responses:
-         *       200:
-         *         description: Restaurante(s) encontrado(s)
-         *         content:
-         *           application/json:
-         *             schema:
-         *               oneOf:
-         *                 - type: array
-         *                   items:
-         *                     $ref: '#/components/schemas/Restaurant'
-         *                 - $ref: '#/components/schemas/Restaurant'
-         *       204:
-         *         description: Restaurante no registrado
-         *       400:
-         *         description: Error en la solicitud
-         */
-        .get("/", async function (req, res, next) {
-            const id = req.query.id as string | undefined;
-            // if does not have a filter then list all
-            if (!id || id === undefined) {
-                const list = await RestaurantController.listAll();
-                res.status(200).send(list);
-                return;
-            }
-
-            const rest = await RestaurantController.getById(parseInt(id));
-            if (null == rest) {
-                res.status(204).send("Restaurante no registrado");
-                return;
-            }
-
-            res.status(200).send(rest);
-        })
-
-        /**
-         * @swagger
          * components:
          *   schemas:
          *     Restaurant:
@@ -67,7 +20,75 @@ export function NewRestaurantRouter(): Router {
          *         address:
          *           type: string
          *           description: Dirección del restaurante
+         *         id:
+         *           type: number
+         *           description: Id del restaurante
+         *         tablesInfo:
+         *           type: string
+         *           description: URL to fetch tables information of this restaurant
          */
+
+        /**
+         * @swagger
+         * /api/restaurant:
+         *   get:
+         *     summary: Obtiene la lista de restaurantes disponibles con su informacion
+         *     tags: [Restaurants]
+         *     responses:
+         *       200:
+         *         description: Restaurante(s) encontrado(s)
+         *         content:
+         *           application/json:
+         *             schema:
+         *               oneOf:
+         *                 - type: array
+         *                   items:
+         *                     $ref: '#/components/schemas/Restaurant'
+         *                 - $ref: '#/components/schemas/Restaurant'
+         *       204:
+         *         description: No existen Restaurantes no registrados
+         */
+        .get("/", async function (req, res, next) {
+            const list = await RestaurantController.listAll();
+            res.status(200).send(list);
+            return;
+        })
+
+        /**
+         * @swagger
+         * /api/restaurant/:id:
+         *   get:
+         *     summary: Obtiene la informacion del restaurante con dicho "id"
+         *     tags: [Restaurants]
+         *     responses:
+         *       200:
+         *         description: Informacion del Restaurante encontrado
+         *         content:
+         *           application/json:
+         *             schema:
+         *               oneOf:
+         *                 - type: array
+         *                   items:
+         *                     $ref: '#/components/schemas/Restaurant'
+         *                 - $ref: '#/components/schemas/Restaurant'
+         *       404:
+         *         description: No existen el restaurante
+         *       400:
+         *         description: Formato de id incorrecto
+         */
+        .get("/:id", async function (req, res, next) {
+            try {
+                const id = parseInt(req.params.id);
+                const restaurant = await RestaurantController.getById(id);
+                if (null == restaurant) {
+                    res.status(404).send("Restaurante no registrado");
+                    return;
+                }
+                res.status(200).send(restaurant);
+            } catch (err) {
+                res.status(400).send("Bad Id format");
+            }
+        })
 
         /**
          * @swagger
@@ -104,8 +125,13 @@ export function NewRestaurantRouter(): Router {
                 return;
             }
 
-            RestaurantController.add(rest.name, rest.address);
-            res.status(200).send();
+            RestaurantController.add(rest.name, rest.address)
+                .then(() => {
+                    res.status(200).send();
+                })
+                .catch((err) => {
+                    res.status(409).send(err.message);
+                });
         })
 
         /**
