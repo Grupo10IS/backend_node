@@ -18,7 +18,6 @@ export class TableController {
         }
 
         if (filter.capacity !== undefined) {
-            console.log(filter.capacity);
             where.capacity = {
                 [Op.gte]: [parseInt(filter.capacity)],
             };
