@@ -284,6 +284,7 @@ export function NewTablesRouter(): Router {
                 })
                 .catch((err) => {
                     res.status(409).send("Ya existe una mesa en esa posicion");
+                    console.log(err)
                 });
         })
 

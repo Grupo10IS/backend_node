@@ -51,7 +51,6 @@ export class Table extends Model<
                 },
                 name: {
                     type: DataTypes.STRING,
-                    unique: true,
                     allowNull: false,
                     validate: {
                         len: [1, 60],
