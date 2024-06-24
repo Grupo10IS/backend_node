@@ -38,11 +38,6 @@ export function initServer() {
     app.use(apiTablesUrl, setJsonContentType, NewTablesRouter());
     app.use(apiReservationsUrl, setJsonContentType, NewReservationRouter());
 
-    // -- ui routes --
-    app.get("/ui", (req, res) => {
-        res.sendFile(path.join(__dirname, "../public/index.html"));
-    });
-
     // docs
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

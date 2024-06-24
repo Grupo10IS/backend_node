@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import { Reservation } from "../db/Reservation";
 
 import { Table } from "../db/Table";
@@ -40,17 +40,16 @@ export class ReservationController {
         resId: string,
         date: string,
         start: string,
-        end: string
-    ): Promise<Reservation[] | null> {
-        const results = await Reservation.findAll({
-            where: {
-                date: new Date(date),
-                resId: resId,
-                reservation_start: { [Op.lt]: parseInt(end) },
-                reservation_end: { [Op.gt]: parseInt(start) },
-            },
-        });
-
+        end: string,
+        connection: Sequelize
+    ): Promise<Table[] | null> {
+        const results = await Reservation.tablesWithoutReservations(
+            resId,
+            date,
+            start,
+            end,
+            connection
+        );
         return results;
     }
 
