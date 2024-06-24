@@ -77,9 +77,4 @@ describe("Client", async () => {
             expect(response.status).toEqual(400);
         });
     });
-
-    it("Should fail. Invalid get-body request", async () => {
-        const { response } = await fetchData(url); // without "dni" query param
-        expect(response.status).toEqual(400);
-    });
 });

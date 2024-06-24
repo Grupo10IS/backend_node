@@ -48,7 +48,6 @@ export function NewClientRouter(): Router {
          *         name: dni
          *         schema:
          *           type: string
-         *         required: true
          *         description: La cédula del cliente
          *     responses:
          *       200:
@@ -65,7 +64,8 @@ export function NewClientRouter(): Router {
         .get("/", async function (req, res, next) {
             const dni = req.query.dni as string | undefined;
             if (dni === undefined) {
-                res.status(400).send("Se debe proporcionar el id del cliente");
+                const users = await ClientController.listAll();
+                res.status(200).send(JSON.stringify(users));
                 return;
             }
 

@@ -4,7 +4,6 @@ import {
     Model,
     InferAttributes,
     InferCreationAttributes,
-    CreationOptional,
 } from "sequelize";
 
 // implementacion con sequelize de los clientes
@@ -16,16 +15,11 @@ export class Client extends Model<
     declare lastName: string;
     declare firstName: string;
     declare dni: number;
-    declare id: CreationOptional<number>;
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
         Client.init(
             {
-                id: {
-                    type: DataTypes.INTEGER,
-                    autoIncrement: true,
-                },
                 lastName: {
                     type: DataTypes.STRING,
                     allowNull: false,
