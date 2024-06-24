@@ -3,7 +3,6 @@ import { Reservation } from "../db/Reservation";
 
 import { Table } from "../db/Table";
 import { Client } from "../db/Client";
-import sequelize from "sequelize";
 
 type filters = {
     date?: string;
@@ -23,11 +22,15 @@ export class ReservationController {
         }
 
         if (filter.client !== undefined) {
-            where.client = parseInt(filter.client);
+            if (!isNaN(parseInt(filter.client))) {
+                where.client = parseInt(filter.client);
+            }
         }
 
         if (filter.resId !== undefined) {
-            where.resId = parseInt(filter.resId);
+            if (!isNaN(parseInt(filter.resId))) {
+                where.resId = parseInt(filter.resId);
+            }
         }
 
         const results = await Reservation.findAll({
@@ -46,6 +49,7 @@ export class ReservationController {
         date: string,
         start: string,
         end: string,
+        capacity: string,
         connection: Sequelize
     ): Promise<Table[] | null> {
         const results = await Reservation.tablesWithoutReservations(
@@ -53,6 +57,7 @@ export class ReservationController {
             date,
             start,
             end,
+            capacity,
             connection
         );
         return results;
@@ -65,6 +70,10 @@ export class ReservationController {
         reservationStart: number,
         reservationEnd: number
     ) {
+        if (reservationEnd < reservationStart) {
+            throw new Error("Hora de inicio debe ser menor que final");
+        }
+
         try {
             // Verificar si el cliente existe
             const client = await Client.findOne({

@@ -18,7 +18,7 @@ export class Reservation extends Model<
 > {
     declare table: ForeignKey<Table["id"]>;
     declare resId: ForeignKey<Restaurant["id"]>;
-    declare client: ForeignKey<Client["id"]>;
+    declare client: ForeignKey<Client["dni"]>;
     declare date: Date;
     declare reservation_start: number;
     declare reservation_end: number;
@@ -58,6 +58,10 @@ export class Reservation extends Model<
                     type: DataTypes.NUMBER,
                     allowNull: false,
                 },
+                client: {
+                    type: DataTypes.NUMBER,
+                    allowNull: false,
+                },
                 resId: {
                     type: DataTypes.NUMBER,
                     allowNull: false,
@@ -72,6 +76,7 @@ export class Reservation extends Model<
         date: string,
         start: string,
         end: string,
+        capacity: string,
         connection: Sequelize
     ): Promise<Table[]> {
         // Primero, encontramos las reservas que se solapan con el rango de tiempo dado y que pertenecen al restaurante especificado
@@ -79,38 +84,59 @@ export class Reservation extends Model<
             await connection.models.Reservation.findAll({
                 attributes: ["table"],
                 where: {
-                    table: {
-                        [Op.in]: [resId], // Asegurarse de que las reservas pertenecen al restaurante especificado
-                    },
-                    date: {
-                        [Op.eq]: new Date(date),
-                    },
-                    reservation_start: {
-                        [Op.lte]: new Date(`${date}T${end}:00`), // Rango hasta el final del rango de tiempo dado
-                    },
-                    reservation_end: {
-                        [Op.gte]: new Date(`${date}T${start}:00`), // Rango desde el inicio del rango de tiempo dado
-                    },
+                    [Op.and]: [
+                        {
+                            table: {
+                                [Op.in]: [resId],
+                            },
+                        },
+                        {
+                            date: {
+                                [Op.eq]: new Date(date),
+                            },
+                        },
+                        {
+                            reservation_start: {
+                                [Op.lte]: parseInt(start),
+                            },
+                        },
+                        {
+                            reservation_end: {
+                                [Op.gte]: parseInt(end),
+                            },
+                        },
+                    ],
                 },
                 raw: true,
             });
 
         // Extraer los IDs de las tablas reservadas
         const reservedTableIds = overlappingReservations.map(
+            // eslint-disable-next-line
             // @ts-ignore
             (res) => res.table
         );
 
         // Ahora, buscamos las tablas que NO están en la lista de reservas y que pertenecen al restaurante especificado
         return (await connection.models.Table.findAll({
-            attributes: ["id", "name"], // Añade aquí cualquier otro atributo que desees seleccionar
             where: {
-                id: {
-                    [Op.notIn]: reservedTableIds,
-                },
-                resId: {
-                    [Op.eq]: parseInt(resId),
-                },
+                [Op.and]: [
+                    {
+                        id: {
+                            [Op.notIn]: reservedTableIds,
+                        },
+                    },
+                    {
+                        resId: {
+                            [Op.eq]: parseInt(resId),
+                        },
+                    },
+                    {
+                        capacity: {
+                            [Op.gte]: parseInt(capacity),
+                        },
+                    },
+                ],
             },
         })) as Table[];
     }

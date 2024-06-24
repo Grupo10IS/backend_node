@@ -1,7 +1,8 @@
 import express, { Router } from "express";
 import { ReservationController } from "../controllers/ReservationController";
+import { Sequelize } from "sequelize";
 
-export function NewReservationRouter(): Router {
+export function NewReservationRouter(connection: Sequelize): Router {
     const reservationRouter: Router = express.Router();
     reservationRouter
         /**
@@ -149,7 +150,7 @@ export function NewReservationRouter(): Router {
                 !body.reservationEnd
             ) {
                 res.status(400).send(
-                    "Se debe proporcionar el nombre, el id del restaurante, la posición X, la posición Y, el piso y la capacidad"
+                    "Se debe proporcionar clientDni, tableId, date, reservationStart y reservationEnd"
                 );
                 return;
             }
@@ -203,6 +204,24 @@ export function NewReservationRouter(): Router {
 
             ReservationController.cancelReservation(req.body.id);
             res.status(200).send();
+        })
+
+        .get("/tables", async function (req, res, next) {
+            try {
+                const list = await ReservationController.listAvailableTables(
+                    req.query.resId as string,
+                    req.query.date as string,
+                    req.query.start as string,
+                    req.query.end as string,
+                    req.query.capacity as string,
+                    connection,
+                );
+                res.status(200).send(list);
+                return;
+            } catch (error) {
+                res.status(400).send("Bad request format");
+                console.log(error);
+            }
         });
 
     return reservationRouter;

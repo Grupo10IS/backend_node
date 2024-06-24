@@ -24,9 +24,7 @@ export class Client extends Model<
             {
                 id: {
                     type: DataTypes.INTEGER,
-                    allowNull: false,
                     autoIncrement: true,
-                    primaryKey: true,
                 },
                 lastName: {
                     type: DataTypes.STRING,
@@ -46,6 +44,7 @@ export class Client extends Model<
                     type: DataTypes.NUMBER,
                     unique: true,
                     allowNull: false,
+                    primaryKey: true,
                 },
             },
             { sequelize: connection }

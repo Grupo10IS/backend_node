@@ -7,9 +7,15 @@ import swaggerSpec from "../swaggerConfig";
 import { NewClientRouter } from "./routes/ClientRouter";
 import { NewRestaurantRouter } from "./routes/RestaurantRouter";
 import cors from "cors";
-import { apiClientUrl, apiReservationsUrl, apiRestaurantUrl, apiTablesUrl } from "./constants";
+import {
+    apiClientUrl,
+    apiReservationsUrl,
+    apiRestaurantUrl,
+    apiTablesUrl,
+} from "./constants";
 import { NewTablesRouter } from "./routes/TablesRouter";
 import { NewReservationRouter } from "./routes/ReservationRouter";
+import { Sequelize } from "sequelize";
 
 // Middleware to set Content-Type: application/json header
 function setJsonContentType(req: any, res: any, next: any) {
@@ -18,7 +24,7 @@ function setJsonContentType(req: any, res: any, next: any) {
 }
 
 // NOTE: this is because some weird behavior with vitest
-export function initServer() {
+export function initServer(connection: Sequelize) {
     const app = express();
 
     // middlewares
@@ -36,7 +42,11 @@ export function initServer() {
     app.use(apiClientUrl, setJsonContentType, NewClientRouter());
     app.use(apiRestaurantUrl, setJsonContentType, NewRestaurantRouter());
     app.use(apiTablesUrl, setJsonContentType, NewTablesRouter());
-    app.use(apiReservationsUrl, setJsonContentType, NewReservationRouter());
+    app.use(
+        apiReservationsUrl,
+        setJsonContentType,
+        NewReservationRouter(connection)
+    );
 
     // docs
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
