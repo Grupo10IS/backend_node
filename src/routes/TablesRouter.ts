@@ -225,16 +225,12 @@ export function NewTablesRouter(): Router {
          *     Table:
          *       type: object
          *       required:
-         *         - id
          *         - name
          *         - posX
          *         - posY
          *         - floor
          *         - capacity
          *       properties:
-         *         id:
-         *           type: integer
-         *           description: ID auto-generado de la mesa
          *         resId:
          *           type: integer
          *           description: ID del restaurante al que pertenece la mesa
