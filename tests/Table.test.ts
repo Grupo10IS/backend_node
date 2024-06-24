@@ -90,12 +90,38 @@ describe(apiTablesUrl + " endpoint tests", async () => {
     });
 
     // ---- POST ----
-    it("Should fail, restaurant already exists", async () => {
+    it("Should fail, tables collide already exists", async () => {
         const { response } = await postData(url, {
-            name: "al lado del banho",
+            name: "nueva mesa",
             resId: 1,
             posX: 1,
             posY: 1,
+            floor: 1,
+            capacity: 10,
+        });
+
+        expect(response.status).toEqual(409);
+    });
+
+    it("Should 200, created table succesfully", async () => {
+        const { response } = await postData(url, {
+            name: "nueva mesa",
+            resId: 1,
+            posX: 2,
+            posY: 2,
+            floor: 1,
+            capacity: 10,
+        });
+
+        expect(response.status).toEqual(200);
+    });
+
+    it("Should fail, restaurant does not exists", async () => {
+        const { response } = await postData(url, {
+            name: "nueva mesa",
+            resId: 3,
+            posX: 2,
+            posY: 2,
             floor: 1,
             capacity: 10,
         });
@@ -200,6 +226,6 @@ describe(apiTablesUrl + " endpoint tests", async () => {
         expect(response.status).toEqual(200);
 
         const { data } = await fetchData(url);
-        expect(data.length).toEqual(0);
+        expect(data.length).toEqual(1);
     });
 });

@@ -1,5 +1,6 @@
 import { Op } from "sequelize";
 import { Table } from "../db/Table";
+import { RestaurantController } from "./RestaurantController";
 
 type filters = {
     floor?: string;
@@ -47,6 +48,33 @@ export class TableController {
         floor: number,
         capacity: number
     ) {
+        const repeated = await Table.findOne({
+            where: {
+                [Op.and]: [
+                    {
+                        resId: resId,
+                    },
+                    {
+                        posX: posX,
+                    },
+                    {
+                        posY: posY,
+                    },
+                    {
+                        floor: floor,
+                    },
+                ],
+            },
+        });
+
+        if (repeated != null) {
+            throw "Ya existe una mesa en ese lugar";
+        }
+
+        if ((await RestaurantController.getById(resId)) == null) {
+            throw "No existe el restaurante";
+        }
+
         await Table.create({
             name: name,
             resId: resId,

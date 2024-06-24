@@ -3,6 +3,7 @@ import { Reservation } from "../db/Reservation";
 
 import { Table } from "../db/Table";
 import { Client } from "../db/Client";
+import sequelize from "sequelize";
 
 type filters = {
     date?: string;
@@ -31,6 +32,10 @@ export class ReservationController {
 
         const results = await Reservation.findAll({
             where: where,
+            order: [
+                ["table", "DESC"],
+                ["reservation_start", "DESC"],
+            ],
         });
 
         return results;

@@ -283,8 +283,10 @@ export function NewTablesRouter(): Router {
                     res.status(200).send();
                 })
                 .catch((err) => {
-                    res.status(409).send("Ya existe una mesa en esa posicion");
-                    console.log(err)
+                    res.status(409).send(
+                        "NO es posible realizar la operacion, posiblemente el item ya existe"
+                    );
+                    console.log(err);
                 });
         })
 
