@@ -1,4 +1,4 @@
-import { Op, Sequelize } from "sequelize";
+import { Op } from "sequelize";
 import { Reservation } from "../db/Reservation";
 
 import { Table } from "../db/Table";
@@ -36,8 +36,8 @@ export class ReservationController {
         const results = await Reservation.findAll({
             where: where,
             order: [
-                ["table", "DESC"],
-                ["reservation_start", "DESC"],
+                ["reservation_start", "ASC"],
+                ["table", "ASC"],
             ],
         });
 
@@ -49,16 +49,67 @@ export class ReservationController {
         date: string,
         start: string,
         end: string,
-        capacity: string,
-    ): Promise<Table[] | null> {
-        const results = await Reservation.tablesWithoutReservations(
-            resId,
-            date,
-            start,
-            end,
-            capacity,
+        capacity: string
+    ): Promise<Table[]> {
+        // Primero, encontramos las reservas que se solapan con el rango de tiempo dado y que pertenecen al restaurante especificado
+        const overlappingReservations = await Reservation.findAll({
+            attributes: ["table"],
+            where: {
+                [Op.and]: [
+                    {
+                        table: {
+                            [Op.in]: [resId],
+                        },
+                    },
+                    {
+                        date: {
+                            [Op.eq]: new Date(date),
+                        },
+                    },
+                    {
+                        reservation_start: {
+                            [Op.lte]: parseInt(start),
+                        },
+                    },
+                    {
+                        reservation_end: {
+                            [Op.gte]: parseInt(end),
+                        },
+                    },
+                ],
+            },
+            raw: true,
+        });
+
+        // Extraer los IDs de las tablas reservadas
+        const reservedTableIds = overlappingReservations.map(
+            // eslint-disable-next-line
+            // @ts-ignore
+            (res) => res.table
         );
-        return results;
+
+        // Ahora, buscamos las tablas que NO están en la lista de reservas y que pertenecen al restaurante especificado
+        return (await Table.findAll({
+            where: {
+                [Op.and]: [
+                    {
+                        id: {
+                            [Op.notIn]: reservedTableIds,
+                        },
+                    },
+                    {
+                        resId: {
+                            [Op.eq]: parseInt(resId),
+                        },
+                    },
+                    {
+                        capacity: {
+                            [Op.gte]: parseInt(capacity),
+                        },
+                    },
+                ],
+            },
+        })) as Table[];
     }
 
     static async makeReservation(
