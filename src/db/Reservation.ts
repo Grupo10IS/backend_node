@@ -77,11 +77,10 @@ export class Reservation extends Model<
         start: string,
         end: string,
         capacity: string,
-        connection: Sequelize
     ): Promise<Table[]> {
         // Primero, encontramos las reservas que se solapan con el rango de tiempo dado y que pertenecen al restaurante especificado
         const overlappingReservations =
-            await connection.models.Reservation.findAll({
+            await Reservation.findAll({
                 attributes: ["table"],
                 where: {
                     [Op.and]: [
@@ -118,7 +117,7 @@ export class Reservation extends Model<
         );
 
         // Ahora, buscamos las tablas que NO están en la lista de reservas y que pertenecen al restaurante especificado
-        return (await connection.models.Table.findAll({
+        return (await Table.findAll({
             where: {
                 [Op.and]: [
                     {

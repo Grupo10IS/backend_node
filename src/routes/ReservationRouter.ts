@@ -1,8 +1,7 @@
 import express, { Router } from "express";
 import { ReservationController } from "../controllers/ReservationController";
-import { Sequelize } from "sequelize";
 
-export function NewReservationRouter(connection: Sequelize): Router {
+export function NewReservationRouter(): Router {
     const reservationRouter: Router = express.Router();
     reservationRouter
         /**
@@ -214,7 +213,6 @@ export function NewReservationRouter(connection: Sequelize): Router {
                     req.query.start as string,
                     req.query.end as string,
                     req.query.capacity as string,
-                    connection,
                 );
                 res.status(200).send(list);
                 return;

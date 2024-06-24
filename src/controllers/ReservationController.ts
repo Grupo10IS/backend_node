@@ -50,7 +50,6 @@ export class ReservationController {
         start: string,
         end: string,
         capacity: string,
-        connection: Sequelize
     ): Promise<Table[] | null> {
         const results = await Reservation.tablesWithoutReservations(
             resId,
@@ -58,7 +57,6 @@ export class ReservationController {
             start,
             end,
             capacity,
-            connection
         );
         return results;
     }
