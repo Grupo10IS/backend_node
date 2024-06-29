@@ -5,6 +5,7 @@ import {
     Model,
     InferAttributes,
     InferCreationAttributes,
+    CreationOptional,
 } from "sequelize";
 
 // implementacion con sequelize de los clientes
@@ -14,7 +15,7 @@ export class Categoria extends Model<
 > {
     // ------ SEQUELIZE initialization -------
     declare descripcion: string;
-    declare id: number;
+    declare id: CreationOptional<number>;
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
@@ -22,6 +23,7 @@ export class Categoria extends Model<
             {
                 descripcion: {
                     type: DataTypes.STRING,
+                    unique: true,
                     allowNull: false,
                     validate: {
                         len: [1, 60],

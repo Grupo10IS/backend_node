@@ -8,7 +8,7 @@ import {
     ForeignKey,
     CreationOptional,
 } from "sequelize";
-import { Categoria } from "./Categorias";
+import { Categoria } from "./Categoria";
 
 export class Producto extends Model<
     InferAttributes<Producto>,
