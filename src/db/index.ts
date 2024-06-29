@@ -7,7 +7,13 @@ import { Restaurant } from "./Restaurant";
 export async function initDb(url?: string) {
     const dir = url || process.env.DB_URL || "sqlite:memmory:";
 
-    const connection = new Sequelize(dir, { logging: false });
+    const connection = new Sequelize(dir, {
+        logging: false,
+        dialectOptions: {
+            useUTC: false, // Disable automatic UTC conversion for reading
+            dateStrings: true, // Treat DATE and DATETIME fields as strings
+        },
+    });
 
     // configure our sequelize models
     Client.configure(connection);

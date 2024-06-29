@@ -1,3 +1,4 @@
+// Modelo para las referencias de productos
 import {
     Sequelize,
     DataTypes,
@@ -7,23 +8,20 @@ import {
     ForeignKey,
     CreationOptional,
 } from "sequelize";
-import { Restaurant } from "./Restaurant";
+import { Categoria } from "./Categorias";
 
-export class Table extends Model<
-    InferAttributes<Table>,
-    InferCreationAttributes<Table>
+export class Producto extends Model<
+    InferAttributes<Producto>,
+    InferCreationAttributes<Producto>
 > {
-    declare resId: ForeignKey<Restaurant["id"]>;
-    declare name: string;
-    declare posX: number;
-    declare posY: number;
-    declare floor: number;
-    declare capacity: number;
     declare id: CreationOptional<number>;
+    declare categoria: ForeignKey<Categoria["id"]>;
+    declare name: string;
+    declare precio: number;
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
-        Table.init(
+        Producto.init(
             {
                 id: {
                     type: DataTypes.INTEGER,
@@ -32,20 +30,7 @@ export class Table extends Model<
                     primaryKey: true,
                     unique: true,
                 },
-                posX: {
-                    type: DataTypes.INTEGER,
-                    allowNull: false,
-                },
-                posY: {
-                    type: DataTypes.INTEGER,
-                    allowNull: false,
-                },
-                floor: {
-                    type: DataTypes.INTEGER,
-                    allowNull: false,
-                    defaultValue: 1,
-                },
-                capacity: {
+                precio: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
                 },
@@ -56,10 +41,10 @@ export class Table extends Model<
                         len: [1, 60],
                     },
                 },
-                resId: {
+                categoria: {
                     type: DataTypes.NUMBER,
-                    allowNull: false
-                }
+                    allowNull: false,
+                },
             },
             { sequelize: connection }
         );

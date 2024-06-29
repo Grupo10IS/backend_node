@@ -15,7 +15,6 @@ import {
 } from "./constants";
 import { NewTablesRouter } from "./routes/TablesRouter";
 import { NewReservationRouter } from "./routes/ReservationRouter";
-import { Sequelize } from "sequelize";
 
 // Middleware to set Content-Type: application/json header
 function setJsonContentType(req: any, res: any, next: any) {
