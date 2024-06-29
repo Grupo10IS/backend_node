@@ -2,43 +2,55 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { cleanDb, deleteData, fetchData, postData, updateData } from "./utils";
 import { initServer } from "../src/server";
-import { apiCategoriaUrl } from "../src/constants";
+import { apiProductosUrl } from "../src/constants";
+import { Categoria } from "../src/db/Categoria";
 
-const url = "http://localhost:8080" + apiCategoriaUrl;
+const url = "http://localhost:8080" + apiProductosUrl;
 
-describe("Categoria endpoint tests", async () => {
+describe("Products endpoint tests", async () => {
     beforeAll(async () => {
         await cleanDb();
         initServer().listen(8080, () => {});
+
+        Categoria.create({
+            descripcion: "Gaseosa",
+        });
     });
 
     // ---- post ----
-    it("Should create a new category", async () => {
+    it("Should create a new Prodduct", async () => {
         const { response } = await postData(url, {
-            descripcion: "Gaseosas",
+            name: "coca",
+            categoria: 1,
+            precio: 10000,
         });
 
         expect(response.status).toEqual(200);
     });
 
-    it("Should fail. Category already exists", async () => {
-        const { response } = await postData(url, {
-            descripcion: "Gaseosas",
-        });
-
-        expect(response.status).toEqual(409);
-    });
-
     it("Should fail with 400. Invalid post request", async () => {
         const cases = [
             {
-                descripcion: "",
+                name: "",
             },
             {
-                nada: "nombre invalido",
+                name: "producto",
+                precio: 1,
             },
             {
-                descripcion: 1,
+                name: "nombre valido",
+                categoria: "obvio esto es invalido",
+                precio: 1,
+            },
+            {
+                name: "nombre valido",
+                categoria: 2, // categoria no existe
+                precio: "producto",
+            },
+            {
+                name: "nombre valido",
+                categoria: 1, // categoria no existe
+                precio: "tipo de dato invalido",
             },
         ];
 
@@ -49,7 +61,7 @@ describe("Categoria endpoint tests", async () => {
     });
 
     // ---- GET ----
-    it("Should response with the categories list", async () => {
+    it("Should response with the products list", async () => {
         const { data, response } = await fetchData(`${url}`);
 
         expect(response.status).toEqual(200);
@@ -57,15 +69,15 @@ describe("Categoria endpoint tests", async () => {
         expect(data.length).toEqual(1);
 
         const categoria = data[0];
-        expect(categoria).toHaveProperty("descripcion");
-        expect(categoria.descripcion).toEqual("Gaseosas");
+        expect(categoria).toHaveProperty("name");
+        expect(categoria.name).toEqual("coca");
     });
 
     // ---- PUT ----
     it("Should reponse 200. Invalid put request succesfull", async () => {
         const { response } = await updateData(url, {
-            descripcion: "nuevo nombre",
             id: 1,
+            name: "nuevo nombre",
         });
         expect(response.status).toEqual(200);
     });
@@ -73,10 +85,13 @@ describe("Categoria endpoint tests", async () => {
     it("Should fail. Invalid put-body request", async () => {
         const cases = [
             {
-                descripcion: "",
+                name: "",
             },
             {
-                id: 1,
+                nada: "",
+            },
+            {
+                name: 1,
             },
         ];
 
@@ -103,7 +118,7 @@ describe("Categoria endpoint tests", async () => {
         });
     });
 
-    it("Should return status 200 and delete the category", async () => {
+    it("Should return status 200 and delete the product", async () => {
         const { response } = await deleteData(url, { id: 1 });
         expect(response.status).toEqual(200);
 
