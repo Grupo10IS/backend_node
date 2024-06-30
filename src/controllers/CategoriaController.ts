@@ -1,6 +1,6 @@
 import { Categoria } from "../db/Categoria";
 
-export class CategoriaController {
+export class CategoryController {
     static async getById(id: number): Promise<Categoria | null> {
         const res = await Categoria.findByPk(id);
         if (null == res) {
@@ -15,10 +15,8 @@ export class CategoriaController {
         return res;
     }
 
-    static async add(descripcion: string): Promise<Categoria> {
-        return Categoria.create({
-            descripcion: descripcion,
-        });
+    static async add(cat: Categoria): Promise<Categoria> {
+        return Categoria.create(cat);
     }
 
     static async delete(id: number) {
@@ -27,7 +25,7 @@ export class CategoriaController {
 
     static async update(id: number, newRest: Categoria) {
         return Categoria.update(
-            { descripcion: newRest.descripcion, address: newRest.address },
+            { descripcion: newRest.descripcion },
             { where: { id: id } }
         );
     }

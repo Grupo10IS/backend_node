@@ -3,6 +3,7 @@ import { Client } from "./Client";
 import { Table } from "./Table";
 import { Reservation } from "./Reservation";
 import { Restaurant } from "./Restaurant";
+import { Categoria } from "./Categoria";
 
 export async function initDb(url?: string) {
     const dir = url || process.env.DB_URL || "sqlite:memmory:";
@@ -20,6 +21,7 @@ export async function initDb(url?: string) {
     Table.configure(connection);
     Reservation.configure(connection);
     Restaurant.configure(connection);
+    Categoria.configure(connection);
 
     await connection.sync().then();
     await connection.authenticate();

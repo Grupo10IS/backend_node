@@ -29,7 +29,7 @@ export class RestaurantController {
 
     static async update(id: number, newRest: Restaurant) {
         return Restaurant.update(
-            { name: newRest.name, address: newRest.address },
+            newRest,
             { where: { id: id } }
         );
     }

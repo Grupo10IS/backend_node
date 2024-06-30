@@ -30,10 +30,11 @@ export class Categoria extends Model<
                     },
                 },
                 id: {
-                    type: DataTypes.NUMBER,
+                    type: DataTypes.INTEGER,
                     unique: true,
                     allowNull: false,
                     primaryKey: true,
+                    autoIncrement: true,
                 },
             },
             { sequelize: connection }

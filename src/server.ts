@@ -8,6 +8,7 @@ import { NewClientRouter } from "./routes/ClientRouter";
 import { NewRestaurantRouter } from "./routes/RestaurantRouter";
 import cors from "cors";
 import {
+    apiCategoriaUrl,
     apiClientUrl,
     apiReservationsUrl,
     apiRestaurantUrl,
@@ -15,6 +16,7 @@ import {
 } from "./constants";
 import { NewTablesRouter } from "./routes/TablesRouter";
 import { NewReservationRouter } from "./routes/ReservationRouter";
+import { NewCategoryRouter } from "./routes/CategoryRouter";
 
 // Middleware to set Content-Type: application/json header
 function setJsonContentType(req: any, res: any, next: any) {
@@ -42,6 +44,7 @@ export function initServer() {
     app.use(apiRestaurantUrl, setJsonContentType, NewRestaurantRouter());
     app.use(apiTablesUrl, setJsonContentType, NewTablesRouter());
     app.use(apiReservationsUrl, setJsonContentType, NewReservationRouter());
+    app.use(apiCategoriaUrl, setJsonContentType, NewCategoryRouter());
 
     // docs
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

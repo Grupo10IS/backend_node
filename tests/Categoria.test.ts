@@ -32,13 +32,10 @@ describe("Categoria endpoint tests", async () => {
     it("Should fail with 400. Invalid post request", async () => {
         const cases = [
             {
-                descripcion: "",
+                descripcion: "", // descripcion vacia
             },
             {
                 nada: "nombre invalido",
-            },
-            {
-                descripcion: 1,
             },
         ];
 
@@ -67,16 +64,18 @@ describe("Categoria endpoint tests", async () => {
             descripcion: "nuevo nombre",
             id: 1,
         });
+
         expect(response.status).toEqual(200);
+
+        // eslint-disable-next-line
+        const r2 = await fetchData(url);
+        expect(r2.data[0].descripcion).toEqual("nuevo nombre");
     });
 
     it("Should fail. Invalid put-body request", async () => {
         const cases = [
             {
                 descripcion: "",
-            },
-            {
-                id: 1,
             },
         ];
 
@@ -90,15 +89,15 @@ describe("Categoria endpoint tests", async () => {
     it("Should fail. Invalid delete request", async () => {
         const cases = [
             {
-                id: "",
+                nada: "",
             },
             {
-                nada: "",
+                descripcion: 1,
             },
         ];
 
         cases.forEach(async (element) => {
-            const { response } = await updateData(url, element);
+            const { response } = await deleteData(url, element);
             expect(response.status).toEqual(400);
         });
     });

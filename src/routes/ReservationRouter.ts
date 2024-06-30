@@ -90,7 +90,6 @@ export function NewReservationRouter(): Router {
                 return;
             } catch (error) {
                 res.status(400).send("Bad request format");
-                console.log(error);
             }
         })
 
@@ -166,7 +165,6 @@ export function NewReservationRouter(): Router {
                 })
                 .catch((err) => {
                     res.status(409).send("No se puede realizar la reservacion");
-                    console.log(err);
                 });
         })
 
@@ -218,7 +216,6 @@ export function NewReservationRouter(): Router {
                 return;
             } catch (error) {
                 res.status(400).send("Bad request format");
-                console.log(error);
             }
         });
 

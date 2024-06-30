@@ -87,7 +87,6 @@ export function NewTablesRouter(): Router {
                 return;
             } catch (error) {
                 res.status(400).send("Bad request format");
-                console.log(error);
             }
         })
 
@@ -282,7 +281,6 @@ export function NewTablesRouter(): Router {
                     res.status(409).send(
                         "NO es posible realizar la operacion, posiblemente el item ya existe"
                     );
-                    console.log(err);
                 });
         })
 
