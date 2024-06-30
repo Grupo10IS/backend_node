@@ -9,7 +9,7 @@ import {
     CreationOptional,
 } from "sequelize";
 import { Consumo } from "./Consumo";
-import { Producto } from "./Producto";
+import { Product } from "./Producto";
 
 export class DetalleConsumo extends Model<
     InferAttributes<DetalleConsumo>,
@@ -17,7 +17,7 @@ export class DetalleConsumo extends Model<
 > {
     declare id: CreationOptional<number>;
     declare consumo: ForeignKey<Consumo["id"]>;
-    declare producto: ForeignKey<Producto["id"]>;
+    declare producto: ForeignKey<Product["id"]>;
     declare cantidad: number;
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer

@@ -10,9 +10,9 @@ import {
 } from "sequelize";
 import { Categoria } from "./Categoria";
 
-export class Producto extends Model<
-    InferAttributes<Producto>,
-    InferCreationAttributes<Producto>
+export class Product extends Model<
+    InferAttributes<Product>,
+    InferCreationAttributes<Product>
 > {
     declare id: CreationOptional<number>;
     declare categoria: ForeignKey<Categoria["id"]>;
@@ -21,7 +21,7 @@ export class Producto extends Model<
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
-        Producto.init(
+        Product.init(
             {
                 id: {
                     type: DataTypes.INTEGER,
@@ -33,6 +33,10 @@ export class Producto extends Model<
                 precio: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
+                    validate: {
+                        min: 0,
+                        isInt: true,
+                    },
                 },
                 name: {
                     type: DataTypes.STRING,
@@ -42,8 +46,11 @@ export class Producto extends Model<
                     },
                 },
                 categoria: {
-                    type: DataTypes.NUMBER,
+                    type: DataTypes.INTEGER,
                     allowNull: false,
+                    validate: {
+                        isInt: true,
+                    },
                 },
             },
             { sequelize: connection }
