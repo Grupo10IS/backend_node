@@ -5,6 +5,8 @@ import { Reservation } from "./Reservation";
 import { Restaurant } from "./Restaurant";
 import { Categoria } from "./Categoria";
 import { Product } from "./Product";
+import { Consumo } from "./Consumo";
+import { DetalleConsumo } from "./DetalleConsumo";
 
 export async function initDb(url?: string) {
     const dir = url || process.env.DB_URL || "sqlite:memmory:";
@@ -19,11 +21,16 @@ export async function initDb(url?: string) {
 
     // configure our sequelize models
     Client.configure(connection);
+
+    Restaurant.configure(connection);
     Table.configure(connection);
     Reservation.configure(connection);
-    Restaurant.configure(connection);
+
     Categoria.configure(connection);
     Product.configure(connection);
+
+    DetalleConsumo.configure(connection);
+    Consumo.configure(connection);
 
     await connection.sync().then();
     await connection.authenticate();

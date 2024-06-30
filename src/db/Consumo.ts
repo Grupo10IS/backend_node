@@ -8,8 +8,9 @@ import {
     ForeignKey,
     CreationOptional,
 } from "sequelize";
-import { Categoria } from "./Categorias";
+import { Categoria } from "./Categoria";
 import { Client } from "./Client";
+import { DetalleConsumo } from "./DetalleConsumo";
 
 export class Consumo extends Model<
     InferAttributes<Consumo>,
@@ -18,10 +19,10 @@ export class Consumo extends Model<
     declare id: CreationOptional<number>;
     declare mesa: ForeignKey<Categoria["id"]>;
     declare cliente: ForeignKey<Client["dni"]>;
-    declare pagado: boolean; // true es "pagado", false es "aun con consumision"
+    declare pagado: CreationOptional<boolean>; // true es "libre", false es "con consumision" (cargado automaticamente)
 
-    declare fecha_cierre: Date;
-    declare fecha_apertura: Date;
+    declare fecha_apertura: CreationOptional<Date>; // cargado automaticamente
+    declare fecha_cierre: CreationOptional<Date>;
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
     public static configure(connection: Sequelize) {
@@ -63,5 +64,10 @@ export class Consumo extends Model<
                 updatedAt: false,
             }
         );
+        Consumo.hasMany(DetalleConsumo, {
+            sourceKey: "id",
+            foreignKey: "id",
+            as: "detalles", // this determines the name in `associations`!
+        });
     }
 }
