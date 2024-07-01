@@ -9,7 +9,7 @@ import {
     CreationOptional,
 } from "sequelize";
 import { Consumo } from "./Consumo";
-import { Product } from "./Producto";
+import { Product } from "./Product";
 
 export class DetalleConsumo extends Model<
     InferAttributes<DetalleConsumo>,

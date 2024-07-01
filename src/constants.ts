@@ -4,5 +4,5 @@ export const apiRestaurantUrl = "/api/restaurant";
 export const apiTablesUrl = "/api/tables";
 export const apiReservationsUrl = "/api/reservations";
 export const apiCategoriaUrl = "/api/categoria";
-export const apiConsumoUrl = "/api/consumision";
+export const apiConsumoUrl = "/api/consumos";
 export const apiProductosUrl = "/api/productos";
