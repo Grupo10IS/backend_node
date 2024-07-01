@@ -5,9 +5,47 @@ export function NewConsumoRouter(): Router {
     const consumoRouter: Router = express.Router();
     consumoRouter
         /**
-         * @openapi
-         * /consumos/{id}:
+         * @swagger
+         * components:
+         *   schemas:
+         *     Consumo:
+         *       type: object
+         *       required:
+         *         - id
+         *         - mesa
+         *         - cliente
+         *         - pagado
+         *         - fecha_apertura
+         *       properties:
+         *         id:
+         *           type: integer
+         *           format: int64
+         *           description: ID del consumo
+         *         mesa:
+         *           type: integer
+         *           format: int64
+         *           description: ID de la mesa donde se realiza el consumo
+         *         cliente:
+         *           type: integer
+         *           format: int64
+         *           description: ID del cliente asociado al consumo
+         *         pagado:
+         *           type: boolean
+         *           description: Estado de pago del consumo
+         *         fecha_apertura:
+         *           type: string
+         *           format: date-time
+         *           description: Fecha y hora de apertura del consumo
+         *         fecha_cierre:
+         *           type: string
+         *           format: date-time
+         *           description: Fecha y hora de cierre del consumo
+         */    
+        /**
+         * @swagger
+         * /api/consumos/{id}:
          *   get:
+         *     tags: [Consumo]
          *     summary: Obtiene los detalles de un consumo específico por ID
          *     parameters:
          *       - name: id
@@ -63,9 +101,10 @@ export function NewConsumoRouter(): Router {
         })
 
         /**
-         * @openapi
-         * /consumos:
+         * @swagger
+         * /api/consumos:
          *   post:
+         *     tags: [Consumo]
          *     summary: Crea un nuevo consumo
          *     requestBody:
          *       required: true
@@ -145,8 +184,9 @@ export function NewConsumoRouter(): Router {
 
         /**
          * @swagger
-         * /consumos/{mesa}:
+         * /api/consumos/{mesa}:
          *   put:
+         *     tags: [Consumo]
          *     summary: Cambia el cliente asociado a un consumo existente
          *     parameters:
          *       - name: mesa
@@ -221,9 +261,10 @@ export function NewConsumoRouter(): Router {
         })
 
         /**
-         * @openapi
-         * /consumos/{id}:
+         * @swagger
+         * /api/consumos/{id}:
          *   delete:
+         *     tags: [Consumo]
          *     summary: Paga un consumo existente
          *     parameters:
          *       - name: id
