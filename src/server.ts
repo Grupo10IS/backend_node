@@ -11,6 +11,7 @@ import {
     apiCategoriaUrl,
     apiClientUrl,
     apiConsumoUrl,
+    apiDetallesUrl,
     apiProductosUrl,
     apiReservationsUrl,
     apiRestaurantUrl,
@@ -21,6 +22,7 @@ import { NewReservationRouter } from "./routes/ReservationRouter";
 import { NewCategoryRouter } from "./routes/CategoryRouter";
 import { NewProductRouter } from "./routes/ProductsRouter";
 import { NewConsumoRouter } from "./routes/ConsumoRouter";
+import { NewDetalleRouter } from "./routes/DetallesRouter";
 
 // Middleware to set Content-Type: application/json header
 function setJsonContentType(req: any, res: any, next: any) {
@@ -51,6 +53,7 @@ export function initServer() {
     app.use(apiCategoriaUrl, setJsonContentType, NewCategoryRouter());
     app.use(apiProductosUrl, setJsonContentType, NewProductRouter());
     app.use(apiConsumoUrl, setJsonContentType, NewConsumoRouter());
+    app.use(apiDetallesUrl, setJsonContentType, NewDetalleRouter());
 
     // docs
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

@@ -64,10 +64,5 @@ export class Consumo extends Model<
                 updatedAt: false,
             }
         );
-        Consumo.hasMany(DetalleConsumo, {
-            sourceKey: "id",
-            foreignKey: "id",
-            as: "detalles", // this determines the name in `associations`!
-        });
     }
 }

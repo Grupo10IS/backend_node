@@ -14,7 +14,7 @@ export class Product extends Model<
     InferAttributes<Product>,
     InferCreationAttributes<Product>
 > {
-    declare id: CreationOptional<number>;
+    declare prod_id: CreationOptional<number>;
     declare categoria: ForeignKey<Categoria["id"]>;
     declare name: string;
     declare precio: number;
@@ -23,9 +23,8 @@ export class Product extends Model<
     public static configure(connection: Sequelize) {
         Product.init(
             {
-                id: {
+                prod_id: {
                     type: DataTypes.INTEGER,
-                    allowNull: false,
                     autoIncrement: true,
                     primaryKey: true,
                     unique: true,

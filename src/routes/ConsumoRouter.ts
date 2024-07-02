@@ -151,11 +151,12 @@ export function NewConsumoRouter(): Router {
          */
         .post("/", async (req, res) => {
             const newConsumo = req.body;
+            console.log(req.body);
             if (
                 newConsumo.mesa == undefined ||
                 newConsumo.cliente == undefined
             ) {
-                res.status(400).send("Error al agregar el consumo");
+                res.status(400).send("Body invalido");
                 return;
             }
 
@@ -163,7 +164,7 @@ export function NewConsumoRouter(): Router {
                 isNaN(parseInt(newConsumo.mesa)) ||
                 isNaN(parseInt(newConsumo.cliente))
             ) {
-                res.status(400).send("Error al agregar el consumo");
+                res.status(400).send("Body invalido");
                 return;
             }
 

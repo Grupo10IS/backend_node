@@ -6,3 +6,4 @@ export const apiReservationsUrl = "/api/reservations";
 export const apiCategoriaUrl = "/api/categoria";
 export const apiConsumoUrl = "/api/consumos";
 export const apiProductosUrl = "/api/productos";
+export const apiDetallesUrl = "/api/detalles";

@@ -126,6 +126,7 @@ export function NewProductRouter(): Router {
                 })
                 .catch((err) => {
                     res.status(403).send(err.message);
+                    console.log(err);
                 });
         })
         /**

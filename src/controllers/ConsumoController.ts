@@ -2,17 +2,23 @@ import { Op } from "sequelize";
 import { Consumo } from "../db/Consumo";
 import { DetalleConsumo } from "../db/DetalleConsumo";
 import { ClientController } from "./ClientController";
+import { TableController } from "./TableController";
+import { Product } from "../db/Product";
 
 export class ConsumoController {
     static async getConsumoByMesa(mesaId: number): Promise<Consumo | null> {
         const res = await Consumo.findOne({
             where: { [Op.and]: [{ mesa: mesaId }, { pagado: false }] },
-            include: [
-                {
-                    model: DetalleConsumo,
-                    as: "detalles",
-                },
-            ],
+        });
+
+        return res;
+    }
+
+    static async getDetalleConsumo(
+        consumo: number
+    ): Promise<DetalleConsumo[] | null> {
+        const res = await DetalleConsumo.findAll({
+            where: { [Op.and]: [{ consumo: consumo }] },
         });
 
         return res;
@@ -37,12 +43,18 @@ export class ConsumoController {
                 throw "La consumision ya se encuetra cerrada";
             }
 
+            const prod = await Product.findByPk(prodId);
+            if (prod == null) {
+                throw "No existe producto con ID: " + prodId;
+            }
+
             return await DetalleConsumo.create({
                 consumo: consId,
                 cantidad: cantidad,
                 producto: prodId,
             });
         } catch (error) {
+            console.log(error);
             return null;
         }
     }
@@ -57,11 +69,11 @@ export class ConsumoController {
                 throw "Mesa ya tiene consumision";
             }
 
-            if (await ClientController.getById(cliente) == null) {
+            if ((await ClientController.getById(cliente)) == null) {
                 throw "Cliente no existe";
             }
 
-            if (await ClientController.getById(mesa) == null) {
+            if ((await TableController.findById(mesa)) == null) {
                 throw "Mesa no existe";
             }
 

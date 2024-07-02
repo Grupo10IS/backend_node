@@ -4,6 +4,7 @@ import {
     Model,
     InferAttributes,
     InferCreationAttributes,
+    CreationOptional,
 } from "sequelize";
 
 // implementacion con sequelize de los clientes

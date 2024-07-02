@@ -6,7 +6,7 @@ export function NewCategoryRouter(): Router {
     catRouter
         /**
          * @swagger
-         * /api/categorias:
+         * /api/categoria:
          *   get:
          *     tags: [Categoria]
          *     summary: Obtiene todas las categorías
@@ -52,7 +52,7 @@ export function NewCategoryRouter(): Router {
         })
         /**
          * @swagger
-         * /api/categorias:
+         * /api/categoria:
          *   post:
          *     tags: [Categoria]
          *     summary: Crea una nueva categoría
@@ -96,7 +96,7 @@ export function NewCategoryRouter(): Router {
         })
         /**
          * @swagger
-         * /api/categorias:
+         * /api/categoria:
          *   put:
          *     tags: [Categoria]
          *     summary: Actualiza una categoría existente
@@ -136,7 +136,7 @@ export function NewCategoryRouter(): Router {
         })
         /**
          * @swagger
-         * /api/categorias:
+         * /api/categoria:
          *   delete:
          *     tags: [Categoria]
          *     summary: Elimina una categoría existente

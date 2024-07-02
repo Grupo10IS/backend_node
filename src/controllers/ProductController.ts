@@ -26,15 +26,16 @@ export class ProductController {
 
             return Product.create(prod);
         } catch (error) {
+            console.log(error);
             return null;
         }
     }
 
     static async delete(id: number) {
-        await Product.destroy({ where: { id: id } }).catch(() => {});
+        await Product.destroy({ where: { prod_id: id } }).catch(() => {});
     }
 
     static async update(id: number, newProd: Product) {
-        return Product.update(newProd, { where: { id: id } });
+        return Product.update(newProd, { where: { prod_id: id } });
     }
 }

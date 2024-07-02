@@ -5,19 +5,16 @@ import {
     Model,
     InferAttributes,
     InferCreationAttributes,
-    ForeignKey,
     CreationOptional,
 } from "sequelize";
-import { Consumo } from "./Consumo";
-import { Product } from "./Product";
 
 export class DetalleConsumo extends Model<
     InferAttributes<DetalleConsumo>,
     InferCreationAttributes<DetalleConsumo>
 > {
     declare id: CreationOptional<number>;
-    declare consumo: ForeignKey<Consumo["id"]>;
-    declare producto: ForeignKey<Product["id"]>;
+    declare consumo: number;
+    declare producto: number;
     declare cantidad: number;
 
     // Every Model Has to have a "configure" method, so it can be configured inside our db initializer
@@ -27,16 +24,16 @@ export class DetalleConsumo extends Model<
                 id: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
-                    autoIncrement: true,
                     primaryKey: true,
+                    autoIncrement: true,
                     unique: true,
                 },
                 consumo: {
-                    type: DataTypes.NUMBER,
+                    type: DataTypes.INTEGER,
                     allowNull: false,
                 },
                 producto: {
-                    type: DataTypes.NUMBER,
+                    type: DataTypes.INTEGER,
                     allowNull: false,
                 },
                 cantidad: {
@@ -46,9 +43,6 @@ export class DetalleConsumo extends Model<
             },
             {
                 sequelize: connection,
-                // don't generate an "updatedAt" attribute
-                createdAt: false,
-                updatedAt: false,
             }
         );
     }
