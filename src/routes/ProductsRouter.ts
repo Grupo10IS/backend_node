@@ -59,10 +59,29 @@ export function NewProductRouter(): Router {
             res.status(200).send(list);
             return;
         })
+
+        .get("/:id", async function (req, res, next) {
+            if (isNaN(parseInt(req.params.id))) {
+                res.status(404).send();
+                return;
+            }
+
+            const prod = await ProductController.getById(
+                parseInt(req.params.id)
+            );
+
+            if (prod == null) {
+                res.status(404).send();
+                return;
+            }
+
+            res.status(200).send(prod);
+        })
+
         /**
          * @swagger
          * /api/productos:
-         *   post:  
+         *   post:
          *     tags: [Productos]
          *     summary: Crea un nuevo producto
          *     requestBody:
