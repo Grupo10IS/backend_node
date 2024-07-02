@@ -59,7 +59,31 @@ export function NewProductRouter(): Router {
             res.status(200).send(list);
             return;
         })
-
+        /**
+         * @swagger
+         * /api/productos/{id}:
+         *   get:
+         *     tags: [Productos]
+         *     summary: Obtiene un producto por su ID
+         *     parameters:
+         *       - in: path
+         *         name: id
+         *         required: true
+         *         schema:
+         *           type: integer
+         *         description: ID del producto a obtener
+         *     responses:
+         *       200:
+         *         description: Producto obtenido exitosamente
+         *         content:
+         *           application/json:
+         *             schema:
+         *               $ref: '#/components/schemas/Product'
+         *       404:
+         *         description: Producto no encontrado
+         *       500:
+         *         description: Error al procesar la solicitud
+         */
         .get("/:id", async function (req, res, next) {
             if (isNaN(parseInt(req.params.id))) {
                 res.status(404).send();
